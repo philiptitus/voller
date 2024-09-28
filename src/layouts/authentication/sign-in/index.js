@@ -38,7 +38,7 @@ import borders from "assets/theme/base/borders";
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 
 // Images
-import bgSignIn from "assets/images/signInImage.png";
+import bgSignIn from "assets/images/signup.jpg";
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
@@ -50,8 +50,8 @@ function SignIn() {
       title="Nice to see you!"
       color="white"
       description="Enter your email and password to sign in"
-      premotto="INSPIRED BY THE FUTURE:"
-      motto="THE VISION UI DASHBOARD"
+      premotto="GEMINI AI & INSTAGRAM GRAPH API:"
+      motto="AI DATA ANALYSIS"
       image={bgSignIn}
     >
       <VuiBox component="form" role="form">

@@ -37,30 +37,20 @@ function Footer() {
           sx={{ textAlign: "center", fontWeight: "400 !important" }}
           color="white"
         >
-          @ 2021, Made with ❤️&nbsp;&nbsp;&nbsp; by{" "}
-          <VuiTypography
-            component="a"
-            variant="button"
-            href="https://simmmple.com/"
-            sx={{ textAlign: "center", fontWeight: "500 !important" }}
-            color="white"
-            mr="2px"
-          >
-            Simmmple
-          </VuiTypography>
-          &
+          @ 2024, Philip Titus 
+
+          & powered by
           <VuiTypography
             ml="2px"
             mr="2px"
             component="a"
             variant="button"
-            href="https://www.creative-tim.com/"
+            href="https://documenter.getpostman.com/view/31401198/2sAXqzVd1y"
             sx={{ textAlign: "center", fontWeight: "500 !important" }}
             color="white"
           >
-            Creative Tim
+            VollerAPI
           </VuiTypography>
-          for a better web
         </VuiTypography>
       </VuiBox>
       <VuiBox item xs={10}>
@@ -68,33 +58,24 @@ function Footer() {
           <VuiBox mr={{ xs: "20px", lg: "46px" }}>
             <VuiTypography
               component="a"
-              href="https://www.creative-tim.com/templates"
+              href="https://mrphilip.pythonanywhere.com/portfolio/voller"
               variant="body2"
               color="white"
             >
-              Marketplace
+              About
             </VuiTypography>
           </VuiBox>
           <VuiBox mr={{ xs: "20px", lg: "46px" }}>
             <VuiTypography
               component="a"
-              href="https://www.creative-tim.com/blog/"
+              href="https://mrphilip.pythonanywhere.com/contact/"
               variant="body2"
               color="white"
             >
-              Blog
+              Help
             </VuiTypography>
           </VuiBox>
-          <VuiBox>
-            <VuiTypography
-              component="a"
-              href="https://www.creative-tim.com/license"
-              variant="body2"
-              color="white"
-            >
-              License
-            </VuiTypography>
-          </VuiBox>
+
         </VuiBox>
       </VuiBox>
     </VuiBox>

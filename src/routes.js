@@ -16,7 +16,7 @@
 
 */
 
-/** 
+/**
   All of the routes for the Vision UI Dashboard React are added here,
   You can add a new route, customize the routes and delete the routes here.
 
@@ -25,7 +25,7 @@
 
   For adding a new route you can follow the existing routes in the routes array.
   1. The `type` key with the `collapse` value is used for a route.
-  2. The `type` key with the `title` value is used for a title inside the Sidenav. 
+  2. The `type` key with the `title` value is used for a title inside the Sidenav.
   3. The `type` key with the `divider` value is used for a divider between Sidenav items.
   4. The `name` key is used for the name of the route on the Sidenav.
   5. The `key` key is used for the key of the route (It will help you with the key prop inside a loop).
@@ -59,7 +59,7 @@ import { IoHome } from "react-icons/io5";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboard",
+    name: "Home",
     key: "dashboard",
     route: "/dashboard",
     icon: <IoHome size="15px" color="inherit" />,
@@ -68,32 +68,24 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tables",
-    key: "tables",
-    route: "/tables",
+    name: "Finance",
+    key: "finance",
+    route: "/finance",
     icon: <IoStatsChart size="15px" color="inherit" />,
     component: Tables,
     noCollapse: true,
   },
   {
     type: "collapse",
-    name: "Billing",
-    key: "billing",
-    route: "/billing",
+    name: "Courses",
+    key: "courses",
+    route: "/course",
     icon: <BsCreditCardFill size="15px" color="inherit" />,
     component: Billing,
     noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    route: "/rtl",
-    icon: <IoBuild size="15px" color="inherit" />,
-    component: RTL,
-    noCollapse: true,
-  },
-  { type: "title", title: "Account Pages", key: "account-pages" },
+
+  { type: "title", title: "Account Manager", key: "account-pages" },
   {
     type: "collapse",
     name: "Profile",
@@ -111,6 +103,7 @@ const routes = [
     icon: <IoIosDocument size="15px" color="inherit" />,
     component: SignIn,
     noCollapse: true,
+    hidden: true, // Add hidden property
   },
   {
     type: "collapse",
@@ -120,6 +113,7 @@ const routes = [
     icon: <IoRocketSharp size="15px" color="inherit" />,
     component: SignUp,
     noCollapse: true,
+    hidden: true, // Add hidden property
   },
 ];
 

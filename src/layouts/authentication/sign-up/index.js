@@ -47,7 +47,7 @@ import borders from "assets/theme/base/borders";
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 
 // Images
-import bgSignIn from "assets/images/signUpImage.png";
+import bgSignIn from "assets/images/signup.jpg";
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
@@ -58,10 +58,10 @@ function SignIn() {
     <CoverLayout
       title="Welcome!"
       color="white"
-      description="Use these awesome forms to login or create new account in your project for free."
+      description="Discover what generative AI can perform with recent data today!"
       image={bgSignIn}
-      premotto="INSPIRED BY THE FUTURE:"
-      motto="THE VISION UI DASHBOARD"
+      premotto="GEMINI AI & INSTAGRAM GRAPH API:"
+      motto="AI DATA ANALYSIS"
       cardContent
     >
       <GradientBorder borderRadius={borders.borderRadius.form} minWidth="100%" maxWidth="100%">
@@ -83,103 +83,10 @@ function SignIn() {
               fontSize: size.lg,
             })}
           >
-            Register with
+            Register
           </VuiTypography>
-          <Stack mb="25px" justifyContent="center" alignItems="center" direction="row" spacing={2}>
-            <GradientBorder borderRadius="xl">
-              <a href="#">
-                <IconButton
-                  transition="all .25s ease"
-                  justify="center"
-                  align="center"
-                  bg="rgb(19,21,54)"
-                  borderradius="15px"
-                  sx={({ palette: { secondary }, borders: { borderRadius } }) => ({
-                    borderRadius: borderRadius.xl,
-                    padding: "25px",
-                    backgroundColor: secondary.focus,
-                    "&:hover": {
-                      backgroundColor: rgba(secondary.focus, 0.9),
-                    },
-                  })}
-                >
-                  <Icon
-                    as={FaFacebook}
-                    w="30px"
-                    h="30px"
-                    sx={({ palette: { white } }) => ({
-                      color: white.focus,
-                    })}
-                  />
-                </IconButton>
-              </a>
-            </GradientBorder>
-            <GradientBorder borderRadius="xl">
-              <a href="#">
-                <IconButton
-                  transition="all .25s ease"
-                  justify="center"
-                  align="center"
-                  bg="rgb(19,21,54)"
-                  borderradius="15px"
-                  sx={({ palette: { secondary }, borders: { borderRadius } }) => ({
-                    borderRadius: borderRadius.xl,
-                    padding: "25px",
-                    backgroundColor: secondary.focus,
-                    "&:hover": {
-                      backgroundColor: rgba(secondary.focus, 0.9),
-                    },
-                  })}
-                >
-                  <Icon
-                    as={FaApple}
-                    w="30px"
-                    h="30px"
-                    sx={({ palette: { white } }) => ({
-                      color: white.focus,
-                    })}
-                  />
-                </IconButton>
-              </a>
-            </GradientBorder>
-            <GradientBorder borderRadius="xl">
-              <a href="#">
-                <IconButton
-                  transition="all .25s ease"
-                  justify="center"
-                  align="center"
-                  bg="rgb(19,21,54)"
-                  borderradius="15px"
-                  sx={({ palette: { secondary }, borders: { borderRadius } }) => ({
-                    borderRadius: borderRadius.xl,
-                    padding: "25px",
-                    backgroundColor: secondary.focus,
-                    "&:hover": {
-                      backgroundColor: rgba(secondary.focus, 0.9),
-                    },
-                  })}
-                >
-                  <Icon
-                    as={FaGoogle}
-                    w="30px"
-                    h="30px"
-                    sx={({ palette: { white } }) => ({
-                      color: white.focus,
-                    })}
-                  />
-                </IconButton>
-              </a>
-            </GradientBorder>
-          </Stack>
-          <VuiTypography
-            color="text"
-            fontWeight="bold"
-            textAlign="center"
-            mb="14px"
-            sx={({ typography: { size } }) => ({ fontSize: size.lg })}
-          >
-            or
-          </VuiTypography>
+
+
           <VuiBox mb={2}>
             <VuiBox mb={1} ml={0.5}>
               <VuiTypography component="label" variant="button" color="white" fontWeight="medium">

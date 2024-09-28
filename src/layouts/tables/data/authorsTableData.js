@@ -1,22 +1,6 @@
-/*!
+// @mui material components
+import Tooltip from "@mui/material/Tooltip";
 
-=========================================================
-* Vision UI Free React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/vision-ui-free-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
-* Licensed under MIT (https://github.com/creativetimofficial/vision-ui-free-react/blob/master LICENSE.md)
-
-* Design and Coded by Simmmple & Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-/* eslint-disable react/prop-types */
 // Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
@@ -31,215 +15,148 @@ import avatar4 from "assets/images/avatar4.png";
 import avatar5 from "assets/images/avatar5.png";
 import avatar6 from "assets/images/avatar6.png";
 
-function Author({ image, name, email }) {
+function FinanceData({ title, location, amount, last_updated, comment_count }) {
   return (
     <VuiBox display="flex" alignItems="center" px={1} py={0.5}>
-      <VuiBox mr={2}>
-        <VuiAvatar src={image} alt={name} size="sm" variant="rounded" />
-      </VuiBox>
       <VuiBox display="flex" flexDirection="column">
         <VuiTypography variant="button" color="white" fontWeight="medium">
-          {name}
+          {title}
         </VuiTypography>
-        <VuiTypography variant="caption" color="text">
-          {email}
-        </VuiTypography>
-      </VuiBox>
-    </VuiBox>
-  );
-}
 
-function Function({ job, org }) {
-  return (
-    <VuiBox display="flex" flexDirection="column">
-      <VuiTypography variant="caption" fontWeight="medium" color="white">
-        {job}
-      </VuiTypography>
-      <VuiTypography variant="caption" color="text">
-        {org}
-      </VuiTypography>
+      </VuiBox>
+      <VuiBox display="flex" flexDirection="column" ml={2}>
+
+
+      </VuiBox>
+      <VuiBox display="flex" flexDirection="column" ml={2}>
+
+      </VuiBox>
     </VuiBox>
   );
 }
 
 export default {
   columns: [
-    { name: "author", align: "left" },
-    { name: "function", align: "left" },
-    { name: "status", align: "center" },
-    { name: "employed", align: "center" },
-    { name: "action", align: "center" },
+    { name: "title", align: "left" },
+    { name: "location", align: "left" },
+    { name: "amount", align: "center" },
+    { name: "last_updated", align: "center" },
+    { name: "comment_count", align: "center" },
   ],
 
   rows: [
     {
-      author: <Author image={avatar4} name="Esthera Jackson" email="esthera@simmmple.com" />,
-      function: <Function job="Manager" org="Organization" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Online"
-          color="success"
-          size="xs"
-          container
-          sx={({ palette: { white, success }, borders: { borderRadius, borderWidth } }) => ({
-            background: success.main,
-            border: `${borderWidth[1]} solid ${success.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      employed: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          23/04/18
+      title: <FinanceData title="Test Finance 1" location="Nairobi, Kenya" amount={60000} last_updated="2024-09-28T14:40:41.859874Z" comment_count={0} />,
+      location: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          Nairobi, Kenya
         </VuiTypography>
       ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
+      amount: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          60000
+        </VuiTypography>
+      ),
+      last_updated: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          {new Date("2024-09-28T14:40:41.859874Z").toLocaleString()}
+        </VuiTypography>
+      ),
+      comment_count: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          0
         </VuiTypography>
       ),
     },
     {
-      author: <Author image={avatar2} name="Alexa Liras" email="alexa@simmmple.com" />,
-      function: <Function job="Programator" org="Developer" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Offline"
-          size="xs"
-          container
-          sx={({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-            background: "unset",
-            border: `${borderWidth[1]} solid ${white.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      employed: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          11/01/19
+      title: <FinanceData title="Test Finance 2" location="Mombasa, Kenya" amount={70000} last_updated="2024-09-27T14:40:41.859874Z" comment_count={1} />,
+      location: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          Mombasa, Kenya
         </VuiTypography>
       ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
+      amount: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          70000
+        </VuiTypography>
+      ),
+      last_updated: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          {new Date("2024-09-27T14:40:41.859874Z").toLocaleString()}
+        </VuiTypography>
+      ),
+      comment_count: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          1
         </VuiTypography>
       ),
     },
     {
-      author: <Author image={avatar3} name="Laurent Michael" email="laurent@simmmple.com" />,
-      function: <Function job="Executive" org="Projects" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Online"
-          color="success"
-          size="xs"
-          container
-          sx={({ palette: { white, success }, borders: { borderRadius, borderWidth } }) => ({
-            background: success.main,
-            border: `${borderWidth[1]} solid ${success.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      employed: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          19/09/17
+      title: <FinanceData title="Test Finance 3" location="Kisumu, Kenya" amount={80000} last_updated="2024-09-26T14:40:41.859874Z" comment_count={2} />,
+      location: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          Kisumu, Kenya
         </VuiTypography>
       ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
+      amount: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          80000
+        </VuiTypography>
+      ),
+      last_updated: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          {new Date("2024-09-26T14:40:41.859874Z").toLocaleString()}
+        </VuiTypography>
+      ),
+      comment_count: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          2
         </VuiTypography>
       ),
     },
     {
-      author: <Author image={avatar1} name="Freduardo Hill" email="freduardo@simmmple.com" />,
-      function: <Function job="Programator" org="Developer" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Online"
-          color="success"
-          size="xs"
-          container
-          sx={({ palette: { white, success }, borders: { borderRadius, borderWidth } }) => ({
-            background: success.main,
-            border: `${borderWidth[1]} solid ${success.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      employed: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          24/12/08
+      title: <FinanceData title="Test Finance 4" location="Nakuru, Kenya" amount={90000} last_updated="2024-09-25T14:40:41.859874Z" comment_count={3} />,
+      location: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          Nakuru, Kenya
         </VuiTypography>
       ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
+      amount: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          90000
+        </VuiTypography>
+      ),
+      last_updated: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          {new Date("2024-09-25T14:40:41.859874Z").toLocaleString()}
+        </VuiTypography>
+      ),
+      comment_count: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          3
         </VuiTypography>
       ),
     },
     {
-      author: <Author image={avatar5} name="Daniel Thomas" email="daniel@simmmple.com" />,
-      function: <Function job="Manager" org="Executive" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Offline"
-          size="xs"
-          container
-          sx={({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-            background: "unset",
-            border: `${borderWidth[1]} solid ${white.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      employed: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          04/10/21
+      title: <FinanceData title="Test Finance 5" location="Eldoret, Kenya" amount={100000} last_updated="2024-09-24T14:40:41.859874Z" comment_count={4} />,
+      location: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          Eldoret, Kenya
         </VuiTypography>
       ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
+      amount: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          100000
         </VuiTypography>
       ),
-    },
-    {
-      author: <Author image={avatar6} name="Mark Wilson" email="mark@simmmple.com" />,
-      function: <Function job="Programtor" org="Developer" />,
-      status: (
-        <VuiBadge
-          variant="standard"
-          badgeContent="Offline"
-          size="xs"
-          container
-          sx={({ palette: { white }, borders: { borderRadius, borderWidth } }) => ({
-            background: "unset",
-            border: `${borderWidth[1]} solid ${white.main}`,
-            borderRadius: borderRadius.md,
-            color: white.main,
-          })}
-        />
-      ),
-      employed: (
-        <VuiTypography variant="caption" color="white" fontWeight="medium">
-          14/09/20
+      last_updated: (
+        <VuiTypography variant="button" color="white" fontWeight="medium">
+          {new Date("2024-09-24T14:40:41.859874Z").toLocaleString()}
         </VuiTypography>
       ),
-      action: (
-        <VuiTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          Edit
+      comment_count: (
+        <VuiTypography variant="button" color="white" fontWeight="bold">
+          4
         </VuiTypography>
       ),
     },
