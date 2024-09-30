@@ -1,30 +1,15 @@
-/*!
-
-=========================================================
-* Vision UI Free React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/vision-ui-free-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
-* Licensed under MIT (https://github.com/creativetimofficial/vision-ui-free-react/blob/master LICENSE.md)
-
-* Design and Coded by Simmmple & Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-import { useState } from "react";
-
-// react-router-dom components
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { register } from "server/actions/userAction"; // Update the path to your actions file
 
 // @mui material components
 import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import CircularProgress from "@mui/material/CircularProgress";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 // Icons
 import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
@@ -50,9 +35,47 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import bgSignIn from "assets/images/signup.jpg";
 
 function SignIn() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, success } = userRegister;
+
+  useEffect(() => {
+    if (success) {
+      setSnackbarMessage("Registration successful!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+      history.push("/dashboard");
+    }
+    if (error) {
+      setSnackbarMessage(error);
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    }
+  }, [success, error, history]);
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(register(name, email, password));
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   return (
     <CoverLayout
@@ -68,6 +91,7 @@ function SignIn() {
         <VuiBox
           component="form"
           role="form"
+          onSubmit={submitHandler}
           borderRadius="inherit"
           p="45px"
           sx={({ palette: { secondary } }) => ({
@@ -85,7 +109,6 @@ function SignIn() {
           >
             Register
           </VuiTypography>
-
 
           <VuiBox mb={2}>
             <VuiBox mb={1} ml={0.5}>
@@ -105,6 +128,8 @@ function SignIn() {
             >
               <VuiInput
                 placeholder="Your full name..."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 sx={({ typography: { size } }) => ({
                   fontSize: size.sm,
                 })}
@@ -130,6 +155,8 @@ function SignIn() {
               <VuiInput
                 type="email"
                 placeholder="Your email..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 sx={({ typography: { size } }) => ({
                   fontSize: size.sm,
                 })}
@@ -155,6 +182,8 @@ function SignIn() {
               <VuiInput
                 type="password"
                 placeholder="Your password..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 sx={({ typography: { size } }) => ({
                   fontSize: size.sm,
                 })}
@@ -174,8 +203,8 @@ function SignIn() {
             </VuiTypography>
           </VuiBox>
           <VuiBox mt={4} mb={1}>
-            <VuiButton color="info" fullWidth>
-              SIGN UP
+            <VuiButton color="info" fullWidth type="submit" disabled={loading}>
+              {loading ? <CircularProgress size={24} color="inherit" /> : "SIGN UP"}
             </VuiButton>
           </VuiBox>
           <VuiBox mt={3} textAlign="center">
@@ -194,6 +223,16 @@ function SignIn() {
           </VuiBox>
         </VuiBox>
       </GradientBorder>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </CoverLayout>
   );
 }
