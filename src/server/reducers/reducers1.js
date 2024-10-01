@@ -140,7 +140,7 @@ export const courseListReducer = (state = { courses: [] }, action) => {
     case COURSE_LIST_REQUEST:
       return { loading: true, ...state };
     case COURSE_LIST_SUCCESS:
-      return { loading: false, courses: action.payload, success: true };
+      return { loading: false, courses: action.payload.results, success: true };
     case COURSE_LIST_FAIL:
       return { loading: false, error: action.payload };
     case COURSE_LIST_RESET:
@@ -248,7 +248,7 @@ export const financeListReducer = (state = { finances: [] }, action) => {
     case FINANCE_LIST_REQUEST:
       return { loading: true, ...state };
     case FINANCE_LIST_SUCCESS:
-      return { loading: false, finances: action.payload, success: true };
+      return { loading: false, finances: action.payload.results, success: true };
     case FINANCE_LIST_FAIL:
       return { loading: false, error: action.payload };
     case FINANCE_LIST_RESET:
@@ -266,7 +266,7 @@ export const trendingIssueListReducer = (state = { issues: [] }, action) => {
     case TRENDING_ISSUE_LIST_REQUEST:
       return { loading: true, ...state };
     case TRENDING_ISSUE_LIST_SUCCESS:
-      return { loading: false, issues: action.payload, success: true };
+      return { loading: false, issues: action.payload.results, success: true };
     case TRENDING_ISSUE_LIST_FAIL:
       return { loading: false, error: action.payload };
     case TRENDING_ISSUE_LIST_RESET:
@@ -302,7 +302,7 @@ export const predictionListReducer = (state = { predictions: [] }, action) => {
     case PREDICTION_LIST_REQUEST:
       return { loading: true, ...state };
     case PREDICTION_LIST_SUCCESS:
-      return { loading: false, predictions: action.payload, success: true };
+      return { loading: false, predictions: action.payload.results, success: true };
     case PREDICTION_LIST_FAIL:
       return { loading: false, error: action.payload };
     case PREDICTION_LIST_RESET:

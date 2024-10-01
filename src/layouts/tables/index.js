@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getFinanceList, resetFinanceList } from "server/actions/actions1";
+import { CircularProgress, Snackbar, Alert } from "@mui/material";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -31,14 +34,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table3";
-
-// Images
-import avatar1 from "assets/images/avatar1.png";
-import avatar2 from "assets/images/avatar2.png";
-import avatar3 from "assets/images/avatar3.png";
-import avatar4 from "assets/images/avatar4.png";
-import avatar5 from "assets/images/avatar5.png";
-import avatar6 from "assets/images/avatar6.png";
 
 function FinanceData({ title, location, amount, last_updated, comment_count }) {
   return (
@@ -73,6 +68,7 @@ function FinanceData({ title, location, amount, last_updated, comment_count }) {
 }
 
 function Tables() {
+  const dispatch = useDispatch();
   const [menu, setMenu] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openCommentModal, setOpenCommentModal] = useState(false);
@@ -83,6 +79,31 @@ function Tables() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const [showNewCommentField, setShowNewCommentField] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSeverity, setToastSeverity] = useState("success");
+
+  const { loading, error, finances, success } = useSelector((state) => state.financeList);
+
+  useEffect(() => {
+    dispatch(getFinanceList());
+    return () => {
+      dispatch(resetFinanceList());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      setToastMessage(error);
+      setToastSeverity("error");
+      setOpenToast(true);
+    }
+    if (success) {
+      setToastMessage("Finances loaded successfully");
+      setToastSeverity("success");
+      setOpenToast(true);
+    }
+  }, [error, success]);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -154,98 +175,6 @@ function Tables() {
     setNewComment("");
   };
 
-  const fakeRows = [
-    {
-      id: 1,
-      title: "Test Finance 1",
-      location: "Nairobi, Kenya",
-      amount: 60000,
-      last_updated: "2024-09-28T14:40:41.859874Z",
-      comment_count: 2,
-      description: "This is test finance 1",
-      comments: [
-        {
-          id: 1,
-          content: "what!!",
-          created_at: "2024-09-28T18:28:35.679757Z",
-          parent: null,
-          replies: [
-            {
-              id: 2,
-              content: "mbona unashangaa",
-              created_at: "2024-09-28T18:28:43.515966Z",
-              parent: 1,
-              replies: null
-            }
-          ]
-        },
-        {
-          id: 3,
-          content: "mbona unashangaa",
-          created_at: "2024-09-28T18:28:43.515966Z",
-          parent: 1,
-          replies: [
-            {
-              id: 4,
-              content: "Just wondering",
-              created_at: "2024-09-28T18:28:45.515966Z",
-              parent: 3,
-              replies: null
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "Test Finance 2",
-      location: "Mombasa, Kenya",
-      amount: 70000,
-      last_updated: "2024-09-27T14:40:41.859874Z",
-      comment_count: 1,
-      description: "This is test finance 2",
-      comments: [
-        {
-          id: 5,
-          content: "Great!",
-          created_at: "2024-09-28T18:28:35.679757Z",
-          parent: null,
-          replies: null
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: "Test Finance 3",
-      location: "Kisumu, Kenya",
-      amount: 80000,
-      last_updated: "2024-09-26T14:40:41.859874Z",
-      comment_count: 0,
-      description: "This is test finance 3",
-      comments: []
-    },
-    {
-      id: 4,
-      title: "Test Finance 4",
-      location: "Nakuru, Kenya",
-      amount: 90000,
-      last_updated: "2024-09-25T14:40:41.859874Z",
-      comment_count: 0,
-      description: "This is test finance 4",
-      comments: []
-    },
-    {
-      id: 5,
-      title: "Test Finance 5",
-      location: "Eldoret, Kenya",
-      amount: 100000,
-      last_updated: "2024-09-24T14:40:41.859874Z",
-      comment_count: 0,
-      description: "This is test finance 5",
-      comments: []
-    },
-  ];
-
   const columns = [
     { name: "title", align: "left" },
     { name: "location", align: "left" },
@@ -255,7 +184,7 @@ function Tables() {
     { name: "actions", align: "center" },
   ];
 
-  const rows = fakeRows.map((row) => ({
+  const rows = finances && finances?.map((row) => ({
     title: (
       <VuiTypography variant="button" color="white" fontWeight="medium">
         {row.title}
@@ -322,7 +251,7 @@ function Tables() {
           <Card>
             <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb="22px">
               <VuiTypography variant="lg" color="white">
-                Latest Public Resources Usage 
+                Latest Public Resources Usage
               </VuiTypography>
               <VuiBox color="text" px={2}>
                 <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
@@ -345,7 +274,11 @@ function Tables() {
                 },
               }}
             >
-              <Table columns={columns} rows={rows} />
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <Table columns={columns} rows={rows} />
+              )}
             </VuiBox>
           </Card>
         </VuiBox>
@@ -512,6 +445,11 @@ function Tables() {
         </Dialog>
       </VuiBox>
       <Footer />
+      <Snackbar open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
+        <Alert onClose={() => setOpenToast(false)} severity={toastSeverity} sx={{ width: "100%" }}>
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </DashboardLayout>
   );
 }

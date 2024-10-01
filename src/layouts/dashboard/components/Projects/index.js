@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getTrendingIssueList, resetTrendingIssueList, enrollBasedOnTrendingIssue, resetEnrollBasedOnTrendingIssue } from "server/actions/actions1";
+import { CircularProgress, Snackbar, Alert } from "@mui/material";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -24,10 +27,47 @@ import VuiTypography from "components/VuiTypography";
 import Table from "examples/Tables/Table";
 
 function Projects() {
+  const dispatch = useDispatch();
   const [menu, setMenu] = useState(null);
   const [openEnrollModal, setOpenEnrollModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState(null);
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSeverity, setToastSeverity] = useState("success");
+
+  const { loading, error, issues, success } = useSelector((state) => state.trendingIssueList);
+  const { loading: enrollLoading, error: enrollError, course, success: enrollSuccess } = useSelector((state) => state.enrollBasedOnTrendingIssue);
+
+  useEffect(() => {
+    dispatch(getTrendingIssueList());
+    return () => {
+      dispatch(resetTrendingIssueList());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      setToastMessage(error);
+      setToastSeverity("error");
+      setOpenToast(true);
+    }
+    if (success) {
+      setToastMessage("Issues loaded successfully");
+      setToastSeverity("success");
+      setOpenToast(true);
+    }
+    if (enrollError) {
+      setToastMessage(enrollError);
+      setToastSeverity("error");
+      setOpenToast(true);
+    }
+    if (enrollSuccess) {
+      setToastMessage("Enrolled successfully");
+      setToastSeverity("success");
+      setOpenToast(true);
+    }
+  }, [error, success, enrollError, enrollSuccess]);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -53,7 +93,7 @@ function Projects() {
   };
 
   const handleEnroll = () => {
-    // Logic to enroll in the course
+    dispatch(enrollBasedOnTrendingIssue(selectedIssue.id));
     handleCloseEnrollModal();
   };
 
@@ -78,44 +118,6 @@ function Projects() {
     </Menu>
   );
 
-  const fakeRows = [
-    {
-      issue: "Drought",
-      location: "Kilifi",
-      count: 1,
-      last_updated: "2024-09-28T14:43:46.265683Z",
-      description: "Drought in Kilifi",
-    },
-    {
-      issue: "Flood",
-      location: "Mombasa",
-      count: 2,
-      last_updated: "2024-09-27T14:43:46.265683Z",
-      description: "Flood in Mombasa",
-    },
-    {
-      issue: "Earthquake",
-      location: "Nairobi",
-      count: 3,
-      last_updated: "2024-09-26T14:43:46.265683Z",
-      description: "Earthquake in Nairobi",
-    },
-    {
-      issue: "Landslide",
-      location: "Kisumu",
-      count: 4,
-      last_updated: "2024-09-25T14:43:46.265683Z",
-      description: "Landslide in Kisumu",
-    },
-    {
-      issue: "Wildfire",
-      location: "Nakuru",
-      count: 5,
-      last_updated: "2024-09-24T14:43:46.265683Z",
-      description: "Wildfire in Nakuru",
-    },
-  ];
-
   const columns = [
     { name: "issue", align: "left" },
     { name: "location", align: "left" },
@@ -124,7 +126,7 @@ function Projects() {
     { name: "actions", align: "center" },
   ];
 
-  const rows = fakeRows.map((row) => ({
+  const rows = issues && issues?.map((row) => ({
     issue: (
       <VuiTypography variant="button" color="white" fontWeight="medium">
         {row.issue}
@@ -196,7 +198,11 @@ function Projects() {
           },
         }}
       >
-        <Table columns={columns} rows={rows} />
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Table columns={columns} rows={rows} />
+        )}
       </VuiBox>
 
       <Dialog open={openEnrollModal} onClose={handleCloseEnrollModal}>
@@ -210,8 +216,8 @@ function Projects() {
           <Button onClick={handleCloseEnrollModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleEnroll} color="primary">
-            Enroll
+          <Button onClick={handleEnroll} color="primary" disabled={enrollLoading}>
+            {enrollLoading ? <CircularProgress size={24} /> : "Enroll"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -241,6 +247,12 @@ function Projects() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
+        <Alert onClose={() => setOpenToast(false)} severity={toastSeverity} sx={{ width: "100%" }}>
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }

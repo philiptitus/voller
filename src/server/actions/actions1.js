@@ -480,7 +480,7 @@ export const getPredictionList = (predictionType = '') => async (dispatch, getSt
       }
     };
 
-    const { data } = await axios.get(`${API_URL}/api/v2/predictions/?type=${predictionType}`, config);
+    const { data } = await axios.get(`${API_URL}/api/v2/predictions/`, config);
 
     dispatch({ type: PREDICTION_LIST_SUCCESS, payload: data });
   } catch (error) {

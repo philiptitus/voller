@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getPredictionList, resetPredictionList } from "server/actions/actions1";
+import { CircularProgress, Snackbar, Alert } from "@mui/material";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -23,9 +26,35 @@ import VuiTypography from "components/VuiTypography";
 import Table from "examples/Tables/Table2";
 
 function Predictions() {
+  const dispatch = useDispatch();
   const [menu, setMenu] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedPrediction, setSelectedPrediction] = useState(null);
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSeverity, setToastSeverity] = useState("success");
+
+  const { loading, error, predictions, success } = useSelector((state) => state.predictionList);
+
+  useEffect(() => {
+    dispatch(getPredictionList());
+    return () => {
+      dispatch(resetPredictionList());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      setToastMessage(error);
+      setToastSeverity("error");
+      setOpenToast(true);
+    }
+    if (success) {
+      setToastMessage("Predictions loaded successfully");
+      setToastSeverity("success");
+      setOpenToast(true);
+    }
+  }, [error, success]);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -40,49 +69,6 @@ function Predictions() {
     setSelectedPrediction(null);
   };
 
-  const fakeRows = [
-    {
-      title: "Prediction 1",
-      location: "Mombasa",
-      predicted_at: "2024-09-28T14:43:05.183328Z",
-      count: 1,
-      type: "human_rights",
-      description: "This is prediction 1",
-    },
-    {
-      title: "Prediction 2",
-      location: "Nairobi",
-      predicted_at: "2024-09-27T14:43:05.183328Z",
-      count: 2,
-      type: "environmental",
-      description: "This is prediction 2",
-    },
-    {
-      title: "Prediction 3",
-      location: "Kisumu",
-      predicted_at: "2024-09-26T14:43:05.183328Z",
-      count: 3,
-      type: "economic",
-      description: "This is prediction 3",
-    },
-    {
-      title: "Prediction 4",
-      location: "Nakuru",
-      predicted_at: "2024-09-25T14:43:05.183328Z",
-      count: 4,
-      type: "social",
-      description: "This is prediction 4",
-    },
-    {
-      title: "Prediction 5",
-      location: "Eldoret",
-      predicted_at: "2024-09-24T14:43:05.183328Z",
-      count: 5,
-      type: "political",
-      description: "This is prediction 5",
-    },
-  ];
-
   const columns = [
     { name: "title", align: "left" },
     { name: "location", align: "left" },
@@ -92,7 +78,7 @@ function Predictions() {
     { name: "actions", align: "center" },
   ];
 
-  const rows = fakeRows.map((row) => ({
+  const rows = predictions && predictions?.map((row) => ({
     title: (
       <VuiTypography variant="button" color="white" fontWeight="medium">
         {row.title}
@@ -187,7 +173,11 @@ function Predictions() {
           },
         }}
       >
-        <Table columns={columns} rows={rows} />
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Table columns={columns} rows={rows} />
+        )}
       </VuiBox>
 
       <Dialog open={openDetailModal} onClose={handleCloseDetailModal}>
@@ -218,6 +208,12 @@ function Predictions() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar open={openToast} autoHideDuration={6000} onClose={() => setOpenToast(false)}>
+        <Alert onClose={() => setOpenToast(false)} severity={toastSeverity} sx={{ width: "100%" }}>
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }
