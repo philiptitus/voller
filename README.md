@@ -15,8 +15,8 @@ While VollerAi is not fully complete, its foundation is strong, and it shows imm
 
 ## Live Demo & Backend API
 
-- **Frontend (React) GitHub Repository:** [VollerAi Frontend](https://github.com/your-username/vollerai-frontend)
-- **Backend (Django) GitHub Repository:** [VollerAi Backend](https://github.com/your-username/vollerai-backend)
+- **Frontend (React) GitHub Repository:** [VollerAi Frontend](https://github.com/philiptitus/voller)
+- **Backend (Django) GitHub Repository:** [VollerAi Backend](https://github.com/philiptitus/VollerAPI)
 
 **Note:** The Django backend is deployed on **Google Cloud Platform (GCP)**, where Cron jobs are set up to automatically collect, analyze, and update the dataset regularly. Please visit the backend repository to explore more of the core functionality and API documentation.
 
