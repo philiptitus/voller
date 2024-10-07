@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Vision UI Free React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/vision-ui-free-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com/)
-* Licensed under MIT (https://github.com/creativetimofficial/vision-ui-free-react/blob/master LICENSE.md)
-
-* Design and Coded by Simmmple & Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
 import { useMemo } from "react";
 
 // prop-types is a library for typechecking of props
@@ -93,7 +75,7 @@ function Table({ columns, rows }) {
             key={uuidv4()}
             component="td"
             p={1}
-            borderBottom={row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null}
+            borderBottom={row.hasBorder ? `${borderWidth[1]} solid ${grey[700]}` : null}
           >
             <VuiBox display="flex" alignItems="center" py={0.5} px={1}>
               <VuiBox mr={2}>
@@ -139,7 +121,7 @@ function Table({ columns, rows }) {
 
   return useMemo(
     () => (
-      <TableContainer>
+      <TableContainer sx={{ margin: "16px", maxWidth: "calc(100% - 32px)", overflowX: "auto" }}>
         <MuiTable>
           <VuiBox component="thead">
             <TableRow>{renderColumns}</TableRow>

@@ -73,7 +73,6 @@ function Predictions() {
     { name: "title", align: "left" },
     { name: "location", align: "left" },
     { name: "predicted_at", align: "center" },
-    { name: "count", align: "center" },
     { name: "type", align: "left" },
     { name: "actions", align: "center" },
   ];
@@ -92,11 +91,6 @@ function Predictions() {
     predicted_at: (
       <VuiTypography variant="button" color="white" fontWeight="medium">
         {new Date(row.predicted_at).toLocaleString()}
-      </VuiTypography>
-    ),
-    count: (
-      <VuiTypography variant="button" color="white" fontWeight="bold">
-        {row.count}
       </VuiTypography>
     ),
     type: (
@@ -138,6 +132,9 @@ function Predictions() {
     <Card
       sx={{
         height: "100% !important",
+        margin: "16px", // Add margin to the sides
+        maxWidth: "calc(100% - 32px)", // Ensure the card doesn't expand beyond the screen width
+        overflowX: "auto",
       }}
     >
       <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb="32px">
@@ -171,6 +168,8 @@ function Predictions() {
                 `${borderWidth[1]} solid ${grey[700]}`,
             },
           },
+          maxWidth: "100%",
+          overflowX: "auto",
         }}
       >
         {loading ? (
@@ -191,9 +190,6 @@ function Predictions() {
           </DialogContentText>
           <DialogContentText>
             <strong>Predicted At:</strong> {new Date(selectedPrediction?.predicted_at).toLocaleString()}
-          </DialogContentText>
-          <DialogContentText>
-            <strong>Count:</strong> {selectedPrediction?.count}
           </DialogContentText>
           <DialogContentText>
             <strong>Type:</strong> {selectedPrediction?.type}

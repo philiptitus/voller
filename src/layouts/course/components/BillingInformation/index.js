@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourseList, resetCourseList, enrollCourse, resetEnrollCourse, unenrollCourse, resetUnenrollCourse } from "server/actions/actions1";
-import { CircularProgress, Snackbar, Alert, IconButton, Box, Typography } from "@mui/material";
-import { useHistory } from "react-router-dom";
-import { Visibility } from "@mui/icons-material";
+import { CircularProgress, Snackbar, Alert } from "@mui/material";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -14,13 +12,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
+// Vision UI Dashboard React components
+import VuiBox from "components/VuiBox";
+import VuiTypography from "components/VuiTypography";
+
 // Course page components
 import Course from "./Course";
 import React from "react";
 
 function CourseInformation() {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [openEnrollModal, setOpenEnrollModal] = useState(false);
   const [openUnenrollModal, setOpenUnenrollModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -60,12 +61,6 @@ function CourseInformation() {
       setToastSeverity("success");
       setOpenToast(true);
       dispatch(resetEnrollCourse());
-      if (selectedCourse) {
-        console.log("Navigating to course detail:", selectedCourse.id);
-        history.push(`/course/${selectedCourse.id}`);
-      } else {
-        console.error("Selected course is null");
-      }
     }
     if (unenrollError) {
       setToastMessage(unenrollError);
@@ -78,7 +73,7 @@ function CourseInformation() {
       setOpenToast(true);
       dispatch(resetUnenrollCourse());
     }
-  }, [error, success, enrollError, enrollSuccess, unenrollError, unenrollSuccess, dispatch, history, selectedCourse]);
+  }, [error, success, enrollError, enrollSuccess, unenrollError, unenrollSuccess]);
 
   const handleOpenEnrollModal = (course) => {
     setSelectedCourse(course);
@@ -101,35 +96,27 @@ function CourseInformation() {
   };
 
   const handleEnroll = () => {
-    if (selectedCourse) {
-      dispatch(enrollCourse(selectedCourse.id));
-      handleCloseEnrollModal();
-    }
+    dispatch(enrollCourse(selectedCourse.id));
+    handleCloseEnrollModal();
   };
 
   const handleUnenroll = () => {
-    if (selectedCourse) {
-      dispatch(unenrollCourse(selectedCourse.id));
-      handleCloseUnenrollModal();
-    }
-  };
-
-  const handleViewCourseDetail = (courseId) => {
-    history.push(`/course/${courseId}`);
+    dispatch(unenrollCourse());
+    handleCloseUnenrollModal();
   };
 
   return (
     <Card id="course-information">
-      <Box>
-        <Typography variant="h4" color="primary" fontWeight="bold">
+      <VuiBox>
+        <VuiTypography variant="lg" color="white" fontWeight="bold">
           Course Information
-        </Typography>
-      </Box>
-      <Box>
+        </VuiTypography>
+      </VuiBox>
+      <VuiBox>
         {loading ? (
           <CircularProgress />
         ) : (
-          <Box component="ul" display="flex" flexDirection="column" p={0} m={0}>
+          <VuiBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
             {courses?.map((course, index) => (
               <Course
                 key={index}
@@ -140,16 +127,11 @@ function CourseInformation() {
                 capacity={course.capacity}
                 onEnroll={() => handleOpenEnrollModal(course)}
                 onUnenroll={() => handleOpenUnenrollModal(course)}
-                onTitleClick={() => handleViewCourseDetail(course.id)}
-              >
-                <IconButton onClick={() => handleViewCourseDetail(course.id)}>
-                  <Visibility />
-                </IconButton>
-              </Course>
+              />
             ))}
-          </Box>
+          </VuiBox>
         )}
-      </Box>
+      </VuiBox>
 
       <Dialog open={openEnrollModal} onClose={handleCloseEnrollModal}>
         <DialogTitle>Enroll in Course</DialogTitle>

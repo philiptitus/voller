@@ -1,44 +1,35 @@
-// @mui material components
-import Card from "@mui/material/Card";
-import IconButton from "@mui/material/IconButton";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import React from "react";
+import { Box, Typography, Button } from "@mui/material";
 
-// Vision UI Dashboard React components
-import VuiBox from "components/VuiBox";
-import VuiTypography from "components/VuiTypography";
-
-function Course({ title, ready, description, updated_at, capacity, onEnroll, onUnenroll }) {
+function Course({ title, ready, description, updated_at, capacity, onEnroll, onUnenroll, onTitleClick }) {
   return (
-    <Card sx={{ mb: 2 }}>
-      <VuiBox p={2} display="flex" justifyContent="space-between" alignItems="center">
-        <VuiBox>
-          <VuiTypography variant="h6" color="white" fontWeight="bold">
-            {title}
-          </VuiTypography>
-          <VuiTypography variant="body2" color="text">
-            {description}
-          </VuiTypography>
-          <VuiTypography variant="body2" color="text">
-            Ready: {ready ? "Yes" : "No"}
-          </VuiTypography>
-          <VuiTypography variant="body2" color="text">
-            Updated At: {new Date(updated_at).toLocaleString()}
-          </VuiTypography>
-          <VuiTypography variant="body2" color="text">
-            Capacity: {capacity}
-          </VuiTypography>
-        </VuiBox>
-        <VuiBox display="flex" alignItems="center">
-          <IconButton onClick={onEnroll} color="primary">
-            <AddCircleOutlineIcon />
-          </IconButton>
-          <IconButton onClick={onUnenroll} color="secondary">
-            <RemoveCircleOutlineIcon />
-          </IconButton>
-        </VuiBox>
-      </VuiBox>
-    </Card>
+    <Box component="li" display="flex" alignItems="center" justifyContent="space-between" p={2} borderBottom="1px solid #ccc">
+      <Box>
+        <Typography variant="h6" component="div" onClick={onTitleClick} style={{ cursor: 'pointer', color: 'blue' }}>
+          {title}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {description}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          Ready: {ready ? "Yes" : "No"}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          Updated At: {updated_at}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          Capacity: {capacity}
+        </Typography>
+      </Box>
+      <Box>
+        <Button variant="contained" color="primary" onClick={onEnroll}>
+          Enroll
+        </Button>
+        <Button variant="contained" color="secondary" onClick={onUnenroll} style={{ marginLeft: '10px' }}>
+          Unenroll
+        </Button>
+      </Box>
+    </Box>
   );
 }
 
