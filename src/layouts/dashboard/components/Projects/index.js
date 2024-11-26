@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTrendingIssueList, resetTrendingIssueList, enrollBasedOnTrendingIssue, resetEnrollBasedOnTrendingIssue } from "server/actions/actions1";
+import { getTrendingIssueList, resetTrendingIssueList, enrollBasedOnTrendingIssue, resetEnrollBasedOnTrendingIssue, translateText, resetTranslateText } from "server/actions/actions1";
 import { CircularProgress, Snackbar, Alert } from "@mui/material";
 
 // @mui material components
@@ -35,9 +35,15 @@ function Projects() {
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastSeverity, setToastSeverity] = useState("success");
+  const [translatedIssues, setTranslatedIssues] = useState([]);
+  const [modalTranslatedTitle, setModalTranslatedTitle] = useState(null);
+  const [modalTranslatedDescription, setModalTranslatedDescription] = useState(null);
+  const [tableTranslateLoading, setTableTranslateLoading] = useState(false);
+  const [modalTranslateLoading, setModalTranslateLoading] = useState(false);
 
   const { loading, error, issues, success } = useSelector((state) => state.trendingIssueList);
   const { loading: enrollLoading, error: enrollError, course, success: enrollSuccess } = useSelector((state) => state.enrollBasedOnTrendingIssue);
+  const { loading: translateLoading, error: translateError, translation, success: translateSuccess } = useSelector((state) => state.translateText);
 
   useEffect(() => {
     dispatch(getTrendingIssueList());
@@ -67,7 +73,40 @@ function Projects() {
       setToastSeverity("success");
       setOpenToast(true);
     }
-  }, [error, success, enrollError, enrollSuccess]);
+    if (translateError) {
+      setToastMessage(translateError);
+      setToastSeverity("error");
+      setOpenToast(true);
+    }
+    if (translateSuccess && tableTranslateLoading) {
+      setToastMessage("Translation successful");
+      setToastSeverity("success");
+      setOpenToast(true);
+
+      // Parse the translation response for the table
+      const translatedIssuesArray = translation.output.split(' ').filter(item => item.trim() !== '');
+      setTranslatedIssues(translatedIssuesArray);
+      setTableTranslateLoading(false);
+    }
+    if (translateSuccess && modalTranslateLoading) {
+      setToastMessage("Translation successful");
+      setToastSeverity("success");
+      setOpenToast(true);
+
+      // Parse the translation response for the modal
+      const translatedText = translation.output;
+      const titleMatch = translatedText.match(/1\. (.+?)(?: 2\.|$)/);
+      const descriptionMatch = translatedText.match(/2\. (.+)/);
+
+      if (titleMatch) {
+        setModalTranslatedTitle(titleMatch[1].trim());
+      }
+      if (descriptionMatch) {
+        setModalTranslatedDescription(descriptionMatch[1].trim());
+      }
+      setModalTranslateLoading(false);
+    }
+  }, [error, success, enrollError, enrollSuccess, translateError, translateSuccess, translation, dispatch, tableTranslateLoading, modalTranslateLoading]);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -85,16 +124,32 @@ function Projects() {
   const handleOpenDetailModal = (issue) => {
     setSelectedIssue(issue);
     setOpenDetailModal(true);
+    setModalTranslatedTitle(null);
+    setModalTranslatedDescription(null);
   };
 
   const handleCloseDetailModal = () => {
     setOpenDetailModal(false);
     setSelectedIssue(null);
+    setModalTranslatedTitle(null);
+    setModalTranslatedDescription(null);
   };
 
   const handleEnroll = () => {
     dispatch(enrollBasedOnTrendingIssue(selectedIssue.id));
     handleCloseEnrollModal();
+  };
+
+  const handleTranslateIssues = () => {
+    const issuesText = issues.map((issue, index) => `${index + 1}.${issue.issue}`).join(' ');
+    setTableTranslateLoading(true);
+    dispatch(translateText(issuesText));
+  };
+
+  const handleTranslateDetail = () => {
+    const textToTranslate = `1. ${selectedIssue.issue} 2. ${selectedIssue.description}`;
+    setModalTranslateLoading(true);
+    dispatch(translateText(textToTranslate));
   };
 
   const renderMenu = (
@@ -126,10 +181,10 @@ function Projects() {
     { name: "actions", align: "center" },
   ];
 
-  const rows = issues && issues?.map((row) => ({
+  const rows = issues && issues?.map((row, index) => ({
     issue: (
       <VuiTypography variant="button" color="white" fontWeight="medium">
-        {row.issue}
+        {translatedIssues[index] ? translatedIssues[index] : row.issue}
       </VuiTypography>
     ),
     location: (
@@ -182,6 +237,9 @@ function Projects() {
             more_vert
           </Icon>
         </VuiBox>
+        <Button variant="contained" color="primary" onClick={handleTranslateIssues} disabled={tableTranslateLoading}>
+          {tableTranslateLoading ? <CircularProgress size={24} /> : "Translate All Issues"}
+        </Button>
         {renderMenu}
       </VuiBox>
       <VuiBox
@@ -226,7 +284,7 @@ function Projects() {
         <DialogTitle>Issue Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <strong>Title:</strong> {selectedIssue?.issue}
+            <strong>Title:</strong> {modalTranslatedTitle || selectedIssue?.issue}
           </DialogContentText>
           <DialogContentText>
             <strong>Location:</strong> {selectedIssue?.location}
@@ -238,10 +296,13 @@ function Projects() {
             <strong>Last Updated:</strong> {new Date(selectedIssue?.last_updated).toLocaleString()}
           </DialogContentText>
           <DialogContentText>
-            <strong>Description:</strong> {selectedIssue?.description}
+            <strong>Description:</strong> {modalTranslatedDescription || selectedIssue?.description}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleTranslateDetail} color="primary" disabled={modalTranslateLoading}>
+            {modalTranslateLoading ? <CircularProgress size={24} /> : "Translate"}
+          </Button>
           <Button onClick={handleCloseDetailModal} color="primary">
             Close
           </Button>
