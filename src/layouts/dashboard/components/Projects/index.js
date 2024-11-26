@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTrendingIssueList, resetTrendingIssueList, enrollBasedOnTrendingIssue, resetEnrollBasedOnTrendingIssue, translateText, resetTranslateText } from "server/actions/actions1";
+import { translateText, resetTranslateText } from "server/actions/actions1";
 import { CircularProgress, Snackbar, Alert } from "@mui/material";
 
 // @mui material components
@@ -41,38 +41,9 @@ function Projects() {
   const [tableTranslateLoading, setTableTranslateLoading] = useState(false);
   const [modalTranslateLoading, setModalTranslateLoading] = useState(false);
 
-  const { loading, error, issues, success } = useSelector((state) => state.trendingIssueList);
-  const { loading: enrollLoading, error: enrollError, course, success: enrollSuccess } = useSelector((state) => state.enrollBasedOnTrendingIssue);
   const { loading: translateLoading, error: translateError, translation, success: translateSuccess } = useSelector((state) => state.translateText);
 
   useEffect(() => {
-    dispatch(getTrendingIssueList());
-    return () => {
-      dispatch(resetTrendingIssueList());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      setToastMessage(error);
-      setToastSeverity("error");
-      setOpenToast(true);
-    }
-    if (success) {
-      setToastMessage("Issues loaded successfully");
-      setToastSeverity("success");
-      setOpenToast(true);
-    }
-    if (enrollError) {
-      setToastMessage(enrollError);
-      setToastSeverity("error");
-      setOpenToast(true);
-    }
-    if (enrollSuccess) {
-      setToastMessage("Enrolled successfully");
-      setToastSeverity("success");
-      setOpenToast(true);
-    }
     if (translateError) {
       setToastMessage(translateError);
       setToastSeverity("error");
@@ -106,7 +77,7 @@ function Projects() {
       }
       setModalTranslateLoading(false);
     }
-  }, [error, success, enrollError, enrollSuccess, translateError, translateSuccess, translation, dispatch, tableTranslateLoading, modalTranslateLoading]);
+  }, [translateError, translateSuccess, translation, dispatch, tableTranslateLoading, modalTranslateLoading]);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
@@ -136,7 +107,10 @@ function Projects() {
   };
 
   const handleEnroll = () => {
-    dispatch(enrollBasedOnTrendingIssue(selectedIssue.id));
+    // Dummy enroll action
+    setToastMessage("Enrolled successfully");
+    setToastSeverity("success");
+    setOpenToast(true);
     handleCloseEnrollModal();
   };
 
@@ -181,7 +155,50 @@ function Projects() {
     { name: "actions", align: "center" },
   ];
 
-  const rows = issues && issues?.map((row, index) => ({
+  const issues = [
+    {
+      id: 1,
+      issue: "High Unemployment Rates",
+      location: "Nairobi",
+      count: 1500,
+      last_updated: "2023-10-01T10:00:00Z",
+      description: "Unemployment rates in Nairobi have been steadily increasing due to economic downturns."
+    },
+    {
+      id: 2,
+      issue: "Food Insecurity",
+      location: "Rift Valley",
+      count: 2000,
+      last_updated: "2023-09-25T12:00:00Z",
+      description: "Food insecurity is a growing concern in the Rift Valley region due to drought and poor harvests."
+    },
+    {
+      id: 3,
+      issue: "Healthcare Access",
+      location: "Coastal Region",
+      count: 1200,
+      last_updated: "2023-09-15T14:00:00Z",
+      description: "Access to healthcare services is limited in the coastal region, affecting the overall health of the population."
+    },
+    {
+      id: 4,
+      issue: "Education Quality",
+      location: "Western Kenya",
+      count: 1800,
+      last_updated: "2023-09-10T16:00:00Z",
+      description: "The quality of education in Western Kenya is below standard, impacting the future prospects of students."
+    },
+    {
+      id: 5,
+      issue: "Water Scarcity",
+      location: "Northern Kenya",
+      count: 2500,
+      last_updated: "2023-09-05T18:00:00Z",
+      description: "Water scarcity is a major issue in Northern Kenya, affecting agriculture and daily life."
+    }
+  ];
+
+  const rows = issues && issues.map((row, index) => ({
     issue: (
       <VuiTypography variant="button" color="white" fontWeight="medium">
         {translatedIssues[index] ? translatedIssues[index] : row.issue}
@@ -223,7 +240,7 @@ function Projects() {
       <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb="32px">
         <VuiBox mb="auto">
           <VuiTypography color="white" variant="lg" mb="6px" gutterBottom>
-            Trending Issues
+            Socioeconomic Issues in Kenya
           </VuiTypography>
           <VuiBox display="flex" alignItems="center" lineHeight={0}>
             <BsCheckCircleFill color="green" size="15px" />
@@ -256,11 +273,7 @@ function Projects() {
           },
         }}
       >
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Table columns={columns} rows={rows} />
-        )}
+        <Table columns={columns} rows={rows} />
       </VuiBox>
 
       <Dialog open={openEnrollModal} onClose={handleCloseEnrollModal}>
@@ -274,8 +287,8 @@ function Projects() {
           <Button onClick={handleCloseEnrollModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleEnroll} color="primary" disabled={enrollLoading}>
-            {enrollLoading ? <CircularProgress size={24} /> : "Enroll"}
+          <Button onClick={handleEnroll} color="primary" disabled={false}>
+            Enroll
           </Button>
         </DialogActions>
       </Dialog>
