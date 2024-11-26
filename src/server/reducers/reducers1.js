@@ -59,7 +59,30 @@ import {
   NOTIFICATION_LIST_SUCCESS,
   NOTIFICATION_LIST_FAIL,
   NOTIFICATION_LIST_RESET,
+  TRANSLATE_TEXT_REQUEST,
+  TRANSLATE_TEXT_SUCCESS,
+  TRANSLATE_TEXT_FAIL,
+  TRANSLATE_TEXT_RESET
 } from '../constants/constants1';
+
+
+// reducers.js
+
+
+export const translateTextReducer = (state = { translation: null }, action) => {
+  switch (action.type) {
+    case TRANSLATE_TEXT_REQUEST:
+      return { loading: true, ...state };
+    case TRANSLATE_TEXT_SUCCESS:
+      return { loading: false, translation: action.payload, success: true };
+    case TRANSLATE_TEXT_FAIL:
+      return { loading: false, error: action.payload };
+    case TRANSLATE_TEXT_RESET:
+      return { translation: null };
+    default:
+      return state;
+  }
+};
 
 // Enroll Course Reducer
 //   /api/v2/courses/<int:course_id>/enroll/
