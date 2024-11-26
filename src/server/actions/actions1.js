@@ -61,7 +61,52 @@ import {
   NOTIFICATION_LIST_SUCCESS,
   NOTIFICATION_LIST_FAIL,
   NOTIFICATION_LIST_RESET,
+ TRANSLATE_TEXT_REQUEST,
+  TRANSLATE_TEXT_SUCCESS,
+  TRANSLATE_TEXT_FAIL,
+  TRANSLATE_TEXT_RESET
 } from '../constants/constants1';
+
+
+// actions.js
+
+
+const url = "https://api.vambo.ai/v1/translate/text";
+const token = "vai-CCSZiwt4EMgB6ohwyuvvzzAnit1ddtUx";
+
+export const translateText = (text) => async (dispatch) => {
+  try {
+    dispatch({ type: TRANSLATE_TEXT_REQUEST });
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const data = {
+      text: text,
+      source_lang: "eng",
+      target_lang: "swh"
+    };
+
+    const response = await axios.post(url, data, config);
+
+    dispatch({ type: TRANSLATE_TEXT_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({
+      type: TRANSLATE_TEXT_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail
+        : error.message,
+    });
+  }
+};
+
+export const resetTranslateText = () => (dispatch) => {
+  dispatch({ type: TRANSLATE_TEXT_RESET });
+};
 
 // Enroll Course Action
 export const enrollCourse = (courseId) => async (dispatch, getState) => {
