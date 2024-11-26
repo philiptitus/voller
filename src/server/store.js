@@ -19,7 +19,7 @@ const reducer = combineReducers({
     resetPassword: userReducers.resetPasswordReducer,
     getOtp: userReducers.getOtpReducer,
     verifyOtp: userReducers.verifyOtpReducer,
-
+    translateText: actionReducers.translateTextReducer,
     // New action-related reducers
     enrollCourse: actionReducers.enrollCourseReducer,
     enrollBasedOnTrendingIssue: actionReducers.enrollBasedOnTrendingIssueReducer,
